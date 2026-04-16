@@ -19,7 +19,7 @@ from transformers import PreTrainedTokenizerBase
 # ---------------------------------------------------------------------------
 
 MODEL_ID = "microsoft/Phi-3-mini-4k-instruct"
-HUB_REPO = "rotemso23/samsum-phi3-lora"
+HUB_REPO = "rotemso23/dialogsum-phi3-lora"
 
 LORA_R = 16
 LORA_ALPHA = 32
@@ -81,13 +81,14 @@ def load_model_and_tokenizer(
         bnb_config = None
 
     # Step 3: base model
+    # trust_remote_code=False: transformers 5.x natively supports Phi-3 — using the
+    # built-in implementation avoids the RoPE scaling KeyError in the custom modeling_phi3.py.
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         quantization_config=bnb_config,
-        device_map="auto",              # places layers on GPU(s) automatically
-        trust_remote_code=True,
-        dtype=torch.float16,            # used when load_in_4bit=False
-        attn_implementation="eager",    # avoids RoPE scaling bug with newer transformers
+        device_map="auto",
+        trust_remote_code=False,
+        dtype=torch.float16,
     )
 
     # Step 4: prepare for k-bit training

@@ -1,5 +1,5 @@
 """
-src/train.py — Training loop for Phi-3-mini + LoRA on SAMSum.
+src/train.py — Training loop for Phi-3-mini + LoRA on DialogSum.
 
 Loads the model and dataset, runs 3 epochs with HuggingFace Trainer,
 logs hyperparameters and per-epoch metrics to MLflow, then pushes
@@ -39,8 +39,8 @@ from src.model import (
 # Config
 # ---------------------------------------------------------------------------
 
-OUTPUT_DIR = "outputs/samsum-phi3-lora"
-MLFLOW_EXPERIMENT = "samsum-phi3-lora"
+OUTPUT_DIR = "outputs/dialogsum-phi3-lora"
+MLFLOW_EXPERIMENT = "dialogsum-phi3-lora"
 
 HYPERPARAMS: dict = {
     "model_id": MODEL_ID,
@@ -123,7 +123,7 @@ def train() -> None:
     """
     Full training pipeline:
         1. Load model + tokenizer (4-bit quant + LoRA).
-        2. Tokenize SAMSum train/val splits.
+        2. Tokenize DialogSum train/val splits.
         3. Run Trainer for 3 epochs, logging to MLflow.
         4. Push adapter + tokenizer to HuggingFace Hub.
     """
@@ -172,7 +172,7 @@ def train() -> None:
     mlflow.set_tracking_uri("mlflow_runs")
     mlflow.set_experiment(MLFLOW_EXPERIMENT)
 
-    with mlflow.start_run(run_name="phi3-lora-samsum"):
+    with mlflow.start_run(run_name="phi3-lora-dialogsum"):
         mlflow.log_params(HYPERPARAMS)
 
         trainer = Trainer(

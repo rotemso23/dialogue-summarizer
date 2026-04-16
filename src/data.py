@@ -1,7 +1,7 @@
 """
-src/data.py — Data preparation for SAMSum fine-tuning of Phi-3-mini with LoRA.
+src/data.py — Data preparation for DialogSum fine-tuning of Phi-3-mini with LoRA.
 
-Loads SAMSum from HuggingFace Hub, formats examples with the Phi-3 chat template,
+Loads DialogSum from HuggingFace Hub, formats examples with the Phi-3 chat template,
 tokenizes with a 1024-token limit, and applies manual label masking so the Trainer
 computes loss only on the assistant's summary tokens.
 
@@ -35,14 +35,14 @@ def format_example(
     tokenizer: PreTrainedTokenizerBase,
 ) -> str:
     """
-    Format a single SAMSum example into a Phi-3 chat template string.
+    Format a single DialogSum example into a Phi-3 chat template string.
 
     Uses tokenizer.apply_chat_template with role=user for the instruction+dialogue
     and role=assistant for the summary. Returns the raw formatted text (not tokenized).
     This is the string that gets printed in the CLI sanity check.
 
     Args:
-        example: A SAMSum example dict with keys 'dialogue' and 'summary'.
+        example: A DialogSum example dict with keys 'dialogue' and 'summary'.
         tokenizer: A Phi-3 tokenizer with apply_chat_template support.
 
     Returns:
@@ -71,7 +71,7 @@ def tokenize_and_mask(
     max_length: int = DEFAULT_MAX_LENGTH,
 ) -> dict:
     """
-    Tokenize one SAMSum example and apply prompt-masking on labels.
+    Tokenize one DialogSum example and apply prompt-masking on labels.
 
     Builds input_ids from the full formatted sequence (prompt + summary).
     Builds labels as a copy of input_ids with prompt positions replaced by -100,
@@ -87,7 +87,7 @@ def tokenize_and_mask(
     all labels are -100 and this example contributes zero loss — this is acceptable.
 
     Args:
-        example: A SAMSum example dict with keys 'dialogue' and 'summary'.
+        example: A DialogSum example dict with keys 'dialogue' and 'summary'.
         tokenizer: A Phi-3 tokenizer (must have apply_chat_template, padding_side='right').
         max_length: Maximum token sequence length. Defaults to 1024.
 
@@ -167,7 +167,7 @@ def prepare_datasets(
     num_proc: int = 4,
 ) -> tuple[Dataset, Dataset, Dataset]:
     """
-    Load SAMSum, format, tokenize, and return train/val/test splits.
+    Load DialogSum, format, tokenize, and return train/val/test splits.
 
     Pipeline:
         1. load_dataset(dataset_name) — uses HF Hub, returns DatasetDict with
@@ -183,7 +183,7 @@ def prepare_datasets(
         tokenizer: Loaded and configured Phi-3 tokenizer. Caller must ensure
                    tokenizer.padding_side == 'right' for training.
         max_length: Max token length for truncation. Defaults to 1024.
-        dataset_name: HuggingFace dataset identifier. Defaults to 'samsum'.
+        dataset_name: HuggingFace dataset identifier. Defaults to 'knkarthick/dialogsum'.
         num_proc: Number of processes for Dataset.map. Defaults to 4.
 
     Returns:
