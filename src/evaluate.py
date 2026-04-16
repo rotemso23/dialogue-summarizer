@@ -12,6 +12,7 @@ Run on Colab T4:
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from typing import Any
 
 import torch
@@ -31,7 +32,6 @@ from src.model import HUB_REPO, MODEL_ID
 BATCH_SIZE = 4
 MAX_NEW_TOKENS = 128
 NUM_QUALITATIVE = 5
-OUTPUT_FILE = "evaluation_results.json"
 
 
 # ---------------------------------------------------------------------------
@@ -263,13 +263,16 @@ def main() -> None:
     print("=" * 52)
 
     # --- Save results ---
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = f"evaluation_results_{timestamp}.json"
     results = {
+        "timestamp": timestamp,
         "fine_tuned": finetuned_rouge,
         "baseline": baseline_rouge,
     }
-    with open(OUTPUT_FILE, "w") as f:
+    with open(output_file, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"\nSaved results to {OUTPUT_FILE}")
+    print(f"\nSaved results to {output_file}")
 
     # --- Qualitative examples ---
     print_qualitative_examples(dialogues, references, finetuned_preds, baseline_preds)
