@@ -22,7 +22,7 @@ from transformers import PreTrainedTokenizerBase
 # ---------------------------------------------------------------------------
 
 INSTRUCTION = "Summarize the following conversation in a few sentences."
-DATASET_NAME = "Samsung/samsum"
+DATASET_NAME = "knkarthick/dialogsum"
 DEFAULT_MAX_LENGTH = 1024
 
 
