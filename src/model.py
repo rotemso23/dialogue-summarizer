@@ -84,9 +84,10 @@ def load_model_and_tokenizer(
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         quantization_config=bnb_config,
-        device_map="auto",          # places layers on GPU(s) automatically
+        device_map="auto",              # places layers on GPU(s) automatically
         trust_remote_code=True,
-        torch_dtype=torch.float16,  # used when load_in_4bit=False
+        dtype=torch.float16,            # used when load_in_4bit=False
+        attn_implementation="eager",    # avoids RoPE scaling bug with newer transformers
     )
 
     # Step 4: prepare for k-bit training
