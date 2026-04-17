@@ -13,7 +13,7 @@ rouge-score==0.1.2
 # Install manually in Colab/Kaggle: pip install mlflow==2.13.0
 
 # Demo UI
-gradio==4.31.5
+gradio>=5.0.0
 
 # Utilities
 python-dotenv==1.0.1

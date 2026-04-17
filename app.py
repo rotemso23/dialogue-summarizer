@@ -41,7 +41,7 @@ demo = gr.Interface(
         "Fine-tuned Phi-3-mini with LoRA on DialogSum. "
         "Paste any messenger-style conversation and get a concise summary."
     ),
-    allow_flagging="never",
+    flagging_mode="never",
 )
 
 if __name__ == "__main__":
