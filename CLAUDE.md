@@ -52,7 +52,8 @@ dialogue-summarizer/
 ├── app.py                  ← Gradio demo UI (entry point for HF Spaces)
 ├── mlflow_runs/            ← local MLflow artifact store (in .gitignore)
 └── notebooks/
-    └── exploration.ipynb   ← optional: loss curves, ROUGE breakdown, example outputs
+    ├── train_colab.ipynb   ← Colab notebook: install deps, clone repo, run train.py
+    └── evaluate_colab.ipynb ← Colab notebook: run evaluate.py, commit results to GitHub
 ```
 
 ## Dataset: DialogSum
@@ -98,7 +99,7 @@ For training, the loss should only be computed on the assistant turn (the summar
 - Load `microsoft/Phi-3-mini-4k-instruct` in 4-bit quantization (BitsAndBytes `load_in_4bit=True`) so it fits on a single T4 GPU
 - Apply LoRA config via `peft.LoraConfig`:
   - `r=16`, `lora_alpha=32`, `lora_dropout=0.05`
-  - Target modules: `q_proj`, `v_proj` (standard for attention-only LoRA)
+  - Target modules: `qkv_proj`, `o_proj` (Phi-3's fused attention projection names)
   - `task_type=CAUSAL_LM`
 - Call `get_peft_model(model, lora_config)` and print trainable parameter count
 - Expected: ~1–2% of total parameters are trainable — print this as a sanity check
@@ -123,7 +124,7 @@ For training, the loss should only be computed on the assistant turn (the summar
 - Run inference on the full test split (819 examples)
 - Compute ROUGE-1, ROUGE-2, ROUGE-L using the `rouge_score` library
 - Compare against a zero-shot baseline: same model, no fine-tuning, same prompt
-- Save results to `evaluation_results.json` — these numbers go in the README
+- Save results to `evaluation_results_<timestamp>.json` — these numbers go in the README. Each run creates a new file so previous results are preserved.
 - Target: fine-tuned model should clearly outperform zero-shot baseline on ROUGE-L
 - Also print 3–5 qualitative examples (dialogue → reference summary → model summary) for the README
 
