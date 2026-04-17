@@ -5,11 +5,12 @@ peft==0.11.1
 bitsandbytes==0.43.1
 accelerate==0.30.1
 
-# Evaluation
+# Evaluation (training/eval only — not needed by the Space)
 rouge-score==0.1.2
 
-# Experiment tracking
-mlflow==2.13.0
+# Experiment tracking (training only — not needed by the Space)
+# mlflow==2.13.0  ← conflicts with datasets>=4.x (pyarrow version clash)
+# Install manually in Colab/Kaggle: pip install mlflow==2.13.0
 
 # Demo UI
 gradio==4.31.5
