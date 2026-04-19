@@ -60,11 +60,10 @@ def _load() -> tuple:
             dtype=torch.float16,
         )
     else:
-        # CPU fallback (HF Spaces free tier) — no quantization, float16
+        # CPU fallback (HF Spaces free tier) — no quantization, float32
         base = AutoModelForCausalLM.from_pretrained(
             MODEL_ID,
-            torch_dtype=torch.float16,
-            device_map="cpu",
+            dtype=torch.float32,
             trust_remote_code=False,
         )
     model = PeftModel.from_pretrained(base, HUB_REPO)
