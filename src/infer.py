@@ -57,7 +57,6 @@ def _load() -> tuple:
             quantization_config=bnb_config,
             device_map="auto",
             trust_remote_code=False,
-            dtype=torch.float16,
         )
     else:
         # CPU fallback (HF Spaces free tier) — no quantization, float32

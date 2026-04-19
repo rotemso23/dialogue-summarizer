@@ -45,7 +45,7 @@ def load_model_and_tokenizer(
         4. Call prepare_model_for_kbit_training() to enable gradient checkpointing
            and cast layer norms to fp32 — required before applying LoRA to a
            quantized model.
-        5. Apply LoraConfig targeting q_proj and v_proj attention projections.
+        5. Apply LoraConfig targeting qkv_proj and o_proj attention projections.
         6. Return (peft_model, tokenizer).
 
     The returned model has ~1-2% trainable parameters (the LoRA adapter weights).
@@ -88,7 +88,6 @@ def load_model_and_tokenizer(
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=False,
-        dtype=torch.float16,
     )
 
     # Step 4: prepare for k-bit training
@@ -115,7 +114,7 @@ def print_trainable_parameters(model: object) -> None:
     """
     Print the number of trainable vs. total parameters and the trainable %.
 
-    Expected output for Phi-3-mini with r=16, target=[q_proj, v_proj]:
+    Expected output for Phi-3-mini with r=16, target=[qkv_proj, o_proj]:
         trainable params: ~8,388,608 (8M)
         total params: ~3,821,079,552 (3.8B)
         trainable %: ~0.22%

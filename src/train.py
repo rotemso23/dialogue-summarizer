@@ -155,7 +155,7 @@ def train() -> None:
         gradient_accumulation_steps=HYPERPARAMS["gradient_accumulation_steps"],
         learning_rate=HYPERPARAMS["learning_rate"],
         fp16=HYPERPARAMS["fp16"],
-        eval_strategy="epoch",
+        evaluation_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",

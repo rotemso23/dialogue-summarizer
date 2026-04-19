@@ -43,7 +43,7 @@ The model is trained on **[DialogSum](https://huggingface.co/datasets/knkarthick
 
 - Train: 12,460 examples (subsampled to 4,000 for efficient fine-tuning)
 - Validation: 500 examples
-- Test: 1,500 examples
+- Test: 819 examples
 
 ---
 
@@ -77,7 +77,7 @@ This is the dominant approach to LLM fine-tuning in industry: faster, cheaper, a
 
 - **Hardware**: Google Colab free tier (NVIDIA T4 GPU, 16 GB VRAM)
 - **Epochs**: 3
-- **Effective batch size**: 16 (batch size 4 × gradient accumulation 4)
+- **Effective batch size**: 16 (batch size 2 × gradient accumulation 8)
 - **Learning rate**: 2e-4
 - **Precision**: fp16
 - **Best checkpoint**: selected by lowest validation loss
@@ -104,7 +104,7 @@ Loss is computed only on the assistant turn (the summary), not on the instructio
 
 ## Results
 
-Evaluated on the full DialogSum test set (1,500 examples).
+Evaluated on the full DialogSum test set (819 examples).
 
 | Model | ROUGE-1 | ROUGE-2 | ROUGE-L |
 |---|---|---|---|

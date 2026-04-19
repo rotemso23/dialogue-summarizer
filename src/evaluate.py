@@ -84,7 +84,6 @@ def _load_base_model(model_id: str = MODEL_ID) -> Any:
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=False,
-        dtype=torch.float16,
     )
     model.eval()
     return model
@@ -215,6 +214,8 @@ def main() -> None:
     references: list[str] = test_data["summary"]
     print(f"Test examples: {len(dialogues)}")
 
+    # Load from base model, not HUB_REPO — the pushed tokenizer config references
+    # TokenizersBackend which fails to resolve on some environments.
     tokenizer = _load_tokenizer()
 
     # --- Fine-tuned model ---

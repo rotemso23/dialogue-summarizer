@@ -171,7 +171,7 @@ def prepare_datasets(
 
     Pipeline:
         1. load_dataset(dataset_name) — uses HF Hub, returns DatasetDict with
-           train (~14732), validation (~818), test (~819) splits.
+           train (~12,460), validation (~500), test (~819) splits.
         2. Dataset.map(tokenize_and_mask, ...) on each split.
         3. Remove original 'id', 'dialogue', 'summary' columns.
 
