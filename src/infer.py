@@ -40,7 +40,7 @@ def _load() -> tuple:
     if _model is not None and _tokenizer is not None:
         return _model, _tokenizer
 
-    tokenizer = AutoTokenizer.from_pretrained(HUB_REPO, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
     tokenizer.padding_side = "left"
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
