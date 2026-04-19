@@ -152,6 +152,9 @@ For training, the loss should only be computed on the assistant turn (the summar
 - `mlflow` conflicts with `datasets>=4.x` (pyarrow version clash) — keep mlflow commented out in requirements.txt; install manually in Colab/Kaggle notebooks only
 - Free tier Space runs on CPU — inference will be very slow (minutes per request); acceptable for a portfolio demo
 - `gradio>=5.9.1` required for Python 3.13 compatibility; use `flagging_mode="never"` (not `allow_flagging`)
+- Do NOT include `bitsandbytes` in requirements.txt for the Space — it imports `triton` which is GPU-only and crashes on the CPU free tier. The CPU inference path does not use quantization so bnb is not needed.
+- Load the tokenizer from `MODEL_ID` (the base model), not from `HUB_REPO` — `tokenizer.push_to_hub()` writes a `tokenizer_config.json` that references `TokenizersBackend`, a class that fails to resolve on the Space. Since LoRA does not modify the tokenizer, loading from the base model is correct and avoids the issue.
+- Use `peft>=0.14.0` — the adapter is saved with a PEFT version that added `alora_invocation_tokens` to `LoraConfig`; older versions throw `TypeError: unexpected keyword argument`.
 - To update the Space after code changes: `git push space master:main`
 
 ### Phase 8: README + GitHub
